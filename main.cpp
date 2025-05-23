@@ -13,6 +13,7 @@
 #include <set>
 #include <queue>
 #include <sstream>
+#include <chrono>
 using namespace std;
 
 #include "utilities.h"
@@ -21,6 +22,7 @@ using namespace std;
 bool parseLine(string &line, string &movieName, double &movieRating);
 
 int main(int argc, char** argv){
+    // auto start = chrono::high_resolution_clock::now();
     if (argc < 2){
         cerr << "Not enough arguments provided (need at least 1 argument)." << endl;
         cerr << "Usage: " << argv[ 0 ] << " moviesFilename prefixFilename " << endl;
@@ -105,10 +107,60 @@ int main(int argc, char** argv){
     //  For each prefix,
     //  Print the highest rated movie with that prefix if it exists.
 
-    return 0;
+    /* auto end = chrono::high_resolution_clock::now();
+    auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    cout << "running time: " << elapsed_ms.count() << " ms\n";
+    return 0; */
+
+
 }
 
-/* Add your run time analysis for part 3 of the assignment here as commented block*/
+
+/* Add your run time analysis for part 3 of the assignment here as commented block
+===============
+TIME COMPLEXITY
+===============
+
+ 1. find the prefix matched time = O(log n)
+
+ 2. scan until the prefix is not matched O(l) per comparison and worst-case with k matched
+ time for 2 is O(k * l)
+
+ total per prefix = O(log n + k * l )
+ with m prefix
+ total time = O(m * (log n + k * l)
+
+=============
+RUNTIME COUNT
+=============
+
+ input_20_random: 47ms
+ input_100_random: 39ms
+ input_1000_random: 46ms
+ input_76920_random: 239ms
+
+================
+SPACE COMPLEXITY
+================
+
+ For n movies = O(n * l)
+ For m prefix = O(m * l)
+ For each searchList = O(k * l) total searchList = O(m * k * l)
+ Total = O( (n * l) + (m * l) + (m * k * l)) = O(nl + mkl)
+
+================
+EXPLORE TRADEOFF
+================
+
+ For part 2 of the assignment, I designed my algorithm with the goal of achieving low time complexity,
+ especially because the task involves searching for movie name prefixes across a large dataset of movies.
+ I used a sorted vector of movies and applied binary search (std::lower_bound) to quickly locate where matching movie names might begin. 
+ This was much faster than scanning the entire list of movies for each prefix.
+ I was unable to keep the space complexity relatively low, since if i want to increase the search speed I may use hashmap, which require more space.
+ Low time complexity was harder to achieve than low space complexity.
+ This is because naive approaches are simple but slow, and optimizing for speed required sorting, binary search, and careful prefix matching.
+ Once time was optimized, the space cost remained manageable.
+*/
 
 bool parseLine(string &line, string &movieName, double &movieRating) {
     int commaIndex = line.find_last_of(",");
