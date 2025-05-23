@@ -1,29 +1,32 @@
 #include <string>
 #include <iostream>
 #include <set>
+#include <vector>
 using namespace std;
 
-class movieList{
+class movieList {
     public:
-    movieList(){};
-    struct movie{
-        public:
-        movie(string n = "", double r = 0 );
+    movieList() {};
+    
+    struct movie {
+        movie(string n = "", double r = 0);
         string getname() const;
         double getrate() const;
         bool operator <(const movie& other) const;
         void printout() const;
-        bool contain(string pre) const ;
-        private:
+        bool contain(string pre) const;
+    private:
         string name;
         double rate;
     };
+
     void addMovie(movie newone);
     void printmovie() const;
-    const set<movie>& getlist() const;
+    const vector<movie>& getlist() const;  
+    void sort();                           
 
-    private:
-    set <movie> movielist;
+private:
+    vector<movie> movielist;  
 };
 class searchList{
     public:

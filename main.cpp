@@ -49,7 +49,7 @@ int main(int argc, char** argv){
     }
 
     movieFile.close();
-
+    listA.sort();
     if (argc == 2){
         listA.printmovie();
         return 0;
@@ -70,13 +70,17 @@ int main(int argc, char** argv){
     }
 
     vector<searchList> listB;
-    for(string x: prefixes){
-        searchList B = searchList(x);
-        for(const movieList::movie& n: listA.getlist()){
-            if(n.contain(x)){
-                searchList::movieRes input(n.getname(), n.getrate());
-                B.addlist(input);
-            }  
+   const std::vector<movieList::movie>& allMovies = listA.getlist();
+
+    for (const std::string& prefix : prefixes) {
+        searchList B(prefix);
+        auto it = std::lower_bound(allMovies.begin(), allMovies.end(), prefix,
+            [](const movieList::movie& m, const std::string& p) {
+            return m.getname() < p;
+            });
+        while (it != allMovies.end() && it->getname().substr(0, prefix.size()) == prefix) {
+            B.addlist(searchList::movieRes(it->getname(), it->getrate()));
+            ++it;
         }
         listB.push_back(B);
     }

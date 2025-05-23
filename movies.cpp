@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <set>
+#include <vector>
 using namespace std;
 
 movieList::movie::movie(string n, double r){
@@ -27,8 +28,13 @@ bool movieList::movie::contain(string pre) const{
     return false;
 }
 
+void movieList::sort() {
+    std::sort(movielist.begin(), movielist.end(), [](const movie& a, const movie& b) {
+        return a.getname() < b.getname();
+    });
+}
 void movieList::addMovie(movie newone){
-    movielist.insert(newone);
+    movielist.push_back(newone);
 }
 
 void movieList::printmovie() const {
@@ -37,7 +43,7 @@ void movieList::printmovie() const {
     }
 }
 
-const set<movieList ::movie>& movieList::getlist() const{
+const vector<movieList ::movie>& movieList::getlist() const{
     return movielist;
 }
 
